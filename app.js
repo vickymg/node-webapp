@@ -4,6 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// tell the app we want to talk to mondb, using monk
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/node-webapp');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -23,6 +27,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Make the db accessible to our router
+// Adding this function means we're adding the db object to every http request the app makes
+app.use(function(req, res, next) {
+  req.db = db;
+  next();
+});
 
 app.use('/', routes);
 app.use('/users', users);

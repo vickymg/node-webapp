@@ -8,9 +8,11 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+// instantiates express and assigns the app variable to it
 var app = express();
 
 // view engine setup
+// tells the app where to find the views, and which engine to render them with (jade)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 

@@ -25,9 +25,33 @@ router.get('/userlist', function(req, res) {
   });
 });
 
-/* GET new user page */
-router.get('newuser', function(req, res) {
-  res.render('newuser', { title: 'Add new user'});
+/* GET New User page. */
+router.get('/newuser', function(req, res) {
+    res.render('newuser', { title: 'Add New User' });
 });
+
+/* POST to add user service */
+router.post('/adduser', function(req, res) {
+  // set internal db variable
+  var db = req.db;
+  // get form values
+  var userName = req.body.username;
+  var userEmail = req.body.useremail;
+  // set the collection
+  var collection = db.get('usercollection');
+  // submit to the db
+  collection.insert({
+    "username": userName,
+    "email": userEmail
+  }, function(err, doc) {
+    if (err) {
+      // if it failed, return error
+      res.send("There was a problem adding information to the databse");
+    } else {
+      // forward to success page
+      res.redirect("userlist");
+    }
+  });
+})
 
 module.exports = router;
